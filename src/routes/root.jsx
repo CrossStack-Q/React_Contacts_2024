@@ -1,42 +1,59 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link, useLoaderData } from 'react-router-dom'
+
+export async function loader() {
+    const contacts = await getContacts();
+    return { contacts };
+}
+import { getContacts } from '../contacts';
 
 function Root() {
+    const { contacts } = useLoaderData();
     return (
         <>
             <div id='sidebar'>
                 <h1>
                     Contacts App
                 </h1>
-                    <div>
-                        <form id='search-form' role="search">
-                            <input type="search" name="q" placeholder='Search' aria-label='Search Contacts' id='q' />
-                            <div id="search-spinner" aria-hidden hidden={true} />
-                            <div className='sr-only' aria-live='polite' />
-                        </form>
-                        <form method='post'>
-                            <button type='submit'>
-                                New
-                            </button>
-                        </form>
-                    </div>
-                    <nav>
+                <div>
+                    <form id='search-form' role="search">
+                        <input type="search" name="q" placeholder='Search' aria-label='Search Contacts' id='q' />
+                        <div id="search-spinner" aria-hidden hidden={true} />
+                        <div className='sr-only' aria-live='polite' />
+                    </form>
+                    <form method='post'>
+                        <button type='submit'>
+                            New
+                        </button>
+                    </form>
+                </div>
+                <nav>
+                    {contacts.length ? (
                         <ul>
-                            <li>
-                                <a href={`/contacts/1`}>
-                                    your Name
-                                </a>
-                            </li>
-                            <li>
-                                <a href={`/contacts/2`}>
-                                    your Friend
-                                </a>
-                            </li>
+                            {contacts.map((contact) => (
+                                <li key={contact.id}>
+                                    <Link to={`contacts/${contact.id}`}>
+                                        {contact.first || contact.last ? (
+                                            <>
+                                                {contact.first} {contact.last}
+                                            </>
+                                        ) : (
+                                            <i>No Name</i>
+                                        )}{" "}
+                                        {contact.favorite && <span>★</span>}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
-                    </nav>
+                    ) : (
+                        <p>
+                            <i>No contacts</i>
+                        </p>
+                    )}
+                </nav>
             </div>
             <div id="detail">
-                <Outlet/>
+                <Outlet />
             </div>
         </>
     )
