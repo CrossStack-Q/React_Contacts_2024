@@ -8,6 +8,11 @@ export async function loader() {
 
 import { getContacts, createContact } from "../contacts";
 
+export async function action() {
+    const contact = await createContact();
+    return { contact };
+  }
+
 function Root() {
     const { contacts } = useLoaderData();
     return (
