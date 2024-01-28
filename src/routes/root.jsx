@@ -1,5 +1,5 @@
 import React from 'react'
-import { Outlet, Link, useLoaderData ,Form} from 'react-router-dom'
+import { Outlet, Link, useLoaderData, Form } from 'react-router-dom'
 
 export async function loader() {
     const contacts = await getContacts();
@@ -11,7 +11,7 @@ import { getContacts, createContact } from "../contacts";
 export async function action() {
     const contact = await createContact();
     return { contact };
-  }
+}
 
 function Root() {
     const { contacts } = useLoaderData();
@@ -27,11 +27,9 @@ function Root() {
                         <div id="search-spinner" aria-hidden hidden={true} />
                         <div className='sr-only' aria-live='polite' />
                     </form>
-                    <form method='post'>
-                        <button type='submit'>
-                            New
-                        </button>
-                    </form>
+                    <Form method="post">
+                        <button type="submit">New</button>
+                    </Form>
                 </div>
                 <nav>
                     {contacts.length ? (
